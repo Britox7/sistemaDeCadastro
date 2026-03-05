@@ -1,0 +1,25 @@
+.containerGeral {
+  min-height: 100vh;
+  background-color: #1e1e1e;
+  padding: 40px;
+  color: white;
+  box-sizing: border-box;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 30px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.searchArea {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  flex-direction: column;
+}
+
+.message {
+  font-size: 18px;
+  opacity: 0.8;
+}
