@@ -1,13 +1,13 @@
 function Catchphrase() {
   return (
-    <div className="bg-yellow-300 w-full py-6 flex flex-col items-center text-center">
+    <div className="h-[200px] bg-yellow-300 w-full py-6 flex flex-col  text-center justify-around items-center">
       
-      <h1 className="text-xl font-semibold">
-        Aqui o ensino vai além da sala de aula!
+      <h1 className="text-4xl  font-normal font-['Akshar'] text-black max-w-[500px]">
+        AQUI O ENSINO VAI ALÉM DA SALA DE AULA!
       </h1>
 
-      <h1 className="text-xl font-semibold">
-        Vem pra melhor!
+      <h1 className="text-4xl font-['Akshar'] font-normal text-black">
+        VEM PRA MELHOR!
       </h1>
 
     </div>

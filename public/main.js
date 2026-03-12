@@ -8,16 +8,15 @@ require('@electron/remote/main').initialize()
 function createWindow() {
 
   const win = new BrowserWindow({
-    width: 1050,
-    height: 700,
     minWidth: 800,
-    minHeight: 600,
-    center: true,
+    minHeight: 740,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true
     }
   })
+
+  win.maximize()
 
   win.loadURL(
     isDev

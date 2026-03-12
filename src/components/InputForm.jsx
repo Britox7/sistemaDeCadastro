@@ -11,7 +11,7 @@ const InputForm = () => {
   };
 
   return (
-    <div className="w-[500px] ">
+    <div className="w-[500px]">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white shadow-md rounded-xl px-8 pt-6 pb-8 mb-4 flex flex-col gap-4"
