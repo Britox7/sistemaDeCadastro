@@ -86,8 +86,8 @@ const InputForm = () => {
         </div>
 
         <div className="flex flex-col gap-3 mt-2">
-          <FormButton textButton="Cadastrar"/>
-          <FormButtonTwo textButton="Alunos cadastrados"/>
+          <FormButton textButton="CADASTRAR"/>
+          <FormButtonTwo textButton="ALUNOS CADASTRADOS"/>
         </div>
 
       </form>

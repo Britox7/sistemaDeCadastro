@@ -1,13 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
 import TelaUm from './pages/TelaUm';
-import TelaDois from './pages/cadastro/TelaDois';
+import TelaCadastro from './pages/cadastro/TelaCadastro';
+import TelaCadastrados from './pages/cadastrados/TelaCadastrados';
+import Dropdown from './components/DropDown';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <TelaDois/>
+        <TelaCadastrados/>
       </header>
     </div>
   );

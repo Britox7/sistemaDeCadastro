@@ -2,13 +2,12 @@ import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Input from '@mui/material/Input';
-import styles from './TelaDois.module.css';
 import InputForm from '../../components/InputForm';
 import ContainerGeral from '../../components/ContainerGeral';
 import Title from '../../components/Title';
 import Catchphrase from '../../components/Catchphrase';
 
-function TelaDois() {
+function TelaCadastro() {
 
     const [searchText, setSearchText] = useState('');
 
@@ -20,4 +19,4 @@ function TelaDois() {
         </ContainerGeral>
     );
 }
-export default TelaDois;
+export default TelaCadastro;
