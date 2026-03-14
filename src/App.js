@@ -1,17 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
-import TelaUm from './pages/TelaUm';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import TelaCadastro from './pages/cadastro/TelaCadastro';
 import TelaCadastrados from './pages/cadastrados/TelaCadastrados';
-import Dropdown from './components/DropDown';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <TelaCadastrados/>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<TelaCadastro />} />
+        <Route path="/cadastrados" element={<TelaCadastrados />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
