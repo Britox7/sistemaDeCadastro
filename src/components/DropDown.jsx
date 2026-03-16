@@ -15,7 +15,7 @@ function Dropdown() {
         <div className="relative inline-block w-fit">
             <button
                 onClick={() => setOpen(!open)}
-                className="w-full inline-flex items-center justify-center text-white bg-gray-600 box-border border border-white hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-lg text-sm px-4 py-2.5 focus:outline-none"
+                className="w-full inline-flex items-center justify-center text-black bg-gray-300 box-border border border-white hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-lg text-sm px-4 py-3 mt-0.5 focus:outline-none"
                 type="button"
             >
                 Pesquisar por: {selected && <span className="ml-1 font-bold">{selected}</span>}
@@ -25,13 +25,13 @@ function Dropdown() {
             </button>
 
             {open && (
-                <div className="absolute z-10 w-full bg-gray-600 border border-default-medium rounded-lg shadow-lg mt-1">
+                <div className="absolute z-10 w-full bg-gray-300 border border-default-medium rounded-lg shadow-lg mt-1">
                     <ul className="p-2 text-sm text-body font-medium">
                         {opcoes.map((opcao) => (
                             <li key={opcao}>
                                 <button
                                     onClick={() => handleSelect(opcao)}
-                                    className={`inline-flex items-center w-full p-2 rounded-lg hover:bg-white hover:text-black ${selected === opcao ? "bg-neutral-tertiary-medium text-heading" : ""}`}
+                                    className={`inline-flex items-center w-full p-2 rounded-lg hover:bg-gray-400 hover:text-black  ${selected === opcao ? "bg-neutral-tertiary-medium text-heading" : ""}`}
                                 >
                                     {opcao}
                                 </button>
