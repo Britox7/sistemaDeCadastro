@@ -5,7 +5,12 @@ import Pagination from "./Pagination";
 
 const ITEMS_PER_PAGE = 5;
 
-function TableStudents({ dropdown }) {
+const meses = [
+  "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+  "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+];
+
+function TableStudents({ dropdown, filtro }) {
   const [alunos, setAlunos] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [editando, setEditando] = useState(null);
@@ -30,9 +35,29 @@ function TableStudents({ dropdown }) {
     carregarAlunos();
   }
 
-  const totalPages = Math.ceil(alunos.length / ITEMS_PER_PAGE);
+  function filtrarAlunos() {
+    if (!filtro) return [...alunos].sort((a, b) => a.nome.localeCompare(b.nome));
+
+    const mesSelecionado = meses.indexOf(filtro) + 1;
+
+    return alunos
+      .filter((aluno) => {
+        const [, mes] = aluno.dataNasc.split('-');
+        return Number(mes) === mesSelecionado;
+      })
+      .sort((a, b) => {
+        const [, mesA, diaA] = a.dataNasc.split('-');
+        const [, mesB, diaB] = b.dataNasc.split('-');
+        if (Number(mesA) !== Number(mesB)) return Number(mesA) - Number(mesB);
+        if (Number(diaA) !== Number(diaB)) return Number(diaA) - Number(diaB);
+        return a.nome.localeCompare(b.nome);
+      });
+  }
+
+  const alunosFiltrados = filtrarAlunos();
+  const totalPages = Math.ceil(alunosFiltrados.length / ITEMS_PER_PAGE);
   const start = (currentPage - 1) * ITEMS_PER_PAGE;
-  const studentsPage = alunos.slice(start, start + ITEMS_PER_PAGE);
+  const studentsPage = alunosFiltrados.slice(start, start + ITEMS_PER_PAGE);
 
   return (
     <div className="w-full max-w-4xl mx-auto">
@@ -41,12 +66,10 @@ function TableStudents({ dropdown }) {
         {dropdown}
       </div>
 
-      {/* Modal de Edição */}
       {editando && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 w-96 flex flex-col gap-4 shadow-xl">
             <h2 className="text-lg font-bold text-gray-700">Editar Aluno</h2>
-
             <div>
               <label className="text-sm font-bold text-gray-700">Nome Completo</label>
               <input
@@ -55,7 +78,6 @@ function TableStudents({ dropdown }) {
                 className="border border-gray-400 rounded w-full py-2 px-3 text-gray-700 mt-1"
               />
             </div>
-
             <div>
               <label className="text-sm font-bold text-gray-700">Curso</label>
               <input
@@ -64,7 +86,6 @@ function TableStudents({ dropdown }) {
                 className="border border-gray-400 rounded w-full py-2 px-3 text-gray-700 mt-1"
               />
             </div>
-
             <div>
               <label className="text-sm font-bold text-gray-700">Data de Nascimento</label>
               <input
@@ -74,7 +95,6 @@ function TableStudents({ dropdown }) {
                 type="date"
               />
             </div>
-
             <div className="flex gap-2 mt-2">
               <button
                 onClick={handleEditSave}

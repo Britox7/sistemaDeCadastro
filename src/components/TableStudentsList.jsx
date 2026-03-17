@@ -4,6 +4,18 @@ function formatarData(data) {
   return `${dia}/${mes}/${ano}`;
 }
 
+function calcularIdade(dataNasc) {
+  if (!dataNasc) return '';
+  const [ano, mes, dia] = dataNasc.split('-');
+  const hoje = new Date();
+  const nascimento = new Date(ano, mes - 1, dia);
+  let idade = hoje.getFullYear() - nascimento.getFullYear();
+  const aniversarioPassou = hoje.getMonth() > nascimento.getMonth() ||
+    (hoje.getMonth() === nascimento.getMonth() && hoje.getDate() >= nascimento.getDate());
+  if (!aniversarioPassou) idade--;
+  return idade;
+}
+
 function TableStudentsList({ alunos, onEdit, onDelete }) {
   return (
     <div className="overflow-x-auto rounded-lg shadow bg-white">
@@ -13,6 +25,7 @@ function TableStudentsList({ alunos, onEdit, onDelete }) {
             <th className="px-6 py-3 text-center">Nome</th>
             <th className="px-6 py-3 text-center">Curso</th>
             <th className="px-6 py-3 text-center">Data de Nascimento</th>
+            <th className="px-6 py-3 text-center">Idade</th>
             <th className="px-6 py-3 text-center">Ações</th>
           </tr>
         </thead>
@@ -22,6 +35,7 @@ function TableStudentsList({ alunos, onEdit, onDelete }) {
               <td className="px-6 py-4 font-medium text-black uppercase text-center">{aluno.nome}</td>
               <td className="px-6 py-4 text-black uppercase text-center">{aluno.curso}</td>
               <td className="px-6 py-4 text-black uppercase text-center">{formatarData(aluno.dataNasc)}</td>
+              <td className="px-6 py-4 text-black text-center">{calcularIdade(aluno.dataNasc)} anos</td>
               <td className="px-6 py-4 text-black">
                 <div className="flex items-center justify-center gap-2">
                   <button
