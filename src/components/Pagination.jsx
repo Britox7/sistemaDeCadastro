@@ -1,12 +1,16 @@
+import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
+
+
 function Pagination({ paginaAtual, totalPaginas, setPaginaAtual }) {
   return (
     <div className="flex items-center justify-center mt-4 gap-2">
       <button
         onClick={() => setPaginaAtual((p) => p - 1)}
         disabled={paginaAtual === 1}
-        className="px-3 py-1.5 rounded-lg bg-gray-300 text-black shadow hover:bg-gray-400 disabled:opacity-40 disabled:cursor-not-allowed transition-colors text-sm"
+        className="flex items-center px-3 py-1.5 rounded-lg bg-gray-300 text-black shadow hover:bg-gray-400 disabled:opacity-40 disabled:cursor-not-allowed transition-colors text-sm"
       >
-        ← Previous
+        <HiArrowLeft className="text-sm mr-1"/>
+        Anterior
       </button>
 
       {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((pagina) => (
@@ -16,7 +20,7 @@ function Pagination({ paginaAtual, totalPaginas, setPaginaAtual }) {
           className={`px-3 py-1.5 rounded-lg shadow transition-colors text-sm ${
             pagina === paginaAtual
               ? "bg-gray-500 text-white"
-              : "bg-gray-300 text-black hover:bg-gray-400"
+              : "bg-gray-300 text-black hover:bg-gray-400 hover:bg-gray-400"
           }`}
         >
           {pagina}
@@ -26,9 +30,10 @@ function Pagination({ paginaAtual, totalPaginas, setPaginaAtual }) {
       <button
         onClick={() => setPaginaAtual((p) => p + 1)}
         disabled={paginaAtual === totalPaginas}
-        className="px-3 py-1.5 rounded-lg bg-gray-300 text-black shadow hover:bg-gray-400 disabled:opacity-40 disabled:cursor-not-allowed transition-colors text-sm"
+        className="flex items-center px-3 py-1.5 rounded-lg bg-gray-300 text-black shadow hover:bg-gray-400 disabled:opacity-40 disabled:cursor-not-allowed transition-colors text-sm"
       >
-        Next →
+        Próxima
+        <HiArrowRight className="text-sm ml-1"/>
       </button>
     </div>
   );

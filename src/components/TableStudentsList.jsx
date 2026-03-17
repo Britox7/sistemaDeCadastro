@@ -1,3 +1,5 @@
+import { HiPencil, HiTrash } from "react-icons/hi";
+
 function formatarData(data) {
   if (!data) return '';
   const [ano, mes, dia] = data.split('-');
@@ -22,16 +24,16 @@ function TableStudentsList({ alunos, onEdit, onDelete }) {
       <table className="w-full text-sm text-left">
         <thead className="text-xs uppercase bg-gray-100 text-gray-600">
           <tr>
-            <th className="px-6 py-3 text-center">Nome</th>
-            <th className="px-6 py-3 text-center">Curso</th>
-            <th className="px-6 py-3 text-center">Data de Nascimento</th>
-            <th className="px-6 py-3 text-center">Idade</th>
-            <th className="px-6 py-3 text-center">Ações</th>
+            <th className="px-6 py-3 text-center text-black">Nome</th>
+            <th className="px-6 py-3 text-center text-black">Curso</th>
+            <th className="px-6 py-3 text-center text-black">Data de Nascimento</th>
+            <th className="px-6 py-3 text-center text-black">Idade</th>
+            <th className="px-6 py-3 text-center text-black">Ações</th>
           </tr>
         </thead>
         <tbody>
           {alunos.map((aluno, index) => (
-            <tr key={index} className="border-b bg-gray-300 transition-colors">
+            <tr key={index} className="border-white border-b bg-gray-300 transition-colors">
               <td className="px-6 py-4 font-medium text-black uppercase text-center">{aluno.nome}</td>
               <td className="px-6 py-4 text-black uppercase text-center">{aluno.curso}</td>
               <td className="px-6 py-4 text-black uppercase text-center">{formatarData(aluno.dataNasc)}</td>
@@ -42,13 +44,15 @@ function TableStudentsList({ alunos, onEdit, onDelete }) {
                     onClick={() => onEdit(aluno)}
                     className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-black bg-yellow-400 hover:bg-yellow-500 rounded-lg transition-colors"
                   >
-                    ✏️ Editar
+                    <HiPencil className="flex items-center text-white text-sm"/>
+                    Editar
                   </button>
                   <button
                     onClick={() => onDelete(aluno.id)}
                     className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-black bg-red-500 hover:bg-red-600 rounded-lg transition-colors"
                   >
-                    🗑️ Deletar
+                    <HiTrash className="flex items-center text-white text-sm"/>
+                    Deletar
                   </button>
                 </div>
               </td>
