@@ -9,11 +9,19 @@ const InputForm = () => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
   const onSubmit = async (data) => {
-    await window.api.cadastrarAluno({
+    const retorno = await window.api.cadastrarAluno({
       nome: data.NomeCompleto,
       curso: data.Curso,
       dataNasc: data.birthdate
     });
+
+    const resultado = JSON.parse(retorno);
+
+    if (!resultado.sucesso) {
+      alert(resultado.erro);
+      return;
+    }
+
     reset();
   };
 
@@ -30,8 +38,8 @@ const InputForm = () => {
           <input
             {...register("NomeCompleto", { required: true })}
             onKeyPress={(e) => {
-            if (/[0-9]/.test(e.key)) e.preventDefault();
-          }}
+              if (/[0-9]/.test(e.key)) e.preventDefault();
+            }}
             className="shadow appearance-none border border-gray-400 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-base"
             id="NomeCompleto"
             type="text"
@@ -46,16 +54,16 @@ const InputForm = () => {
           <label className="text-base text-left block text-gray-700 text-sm font-bold mb-2" htmlFor="Curso">
             Curso
           </label>
-         <input
+          <input
             {...register("Curso", { required: true })}
             onKeyPress={(e) => {
-            if (/[0-9]/.test(e.key)) e.preventDefault();
-          }}
+              if (/[0-9]/.test(e.key)) e.preventDefault();
+            }}
             className="text-base shadow appearance-none border border-gray-400 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="Curso"
             type="text"
             placeholder="Informe o curso do aluno"
-        />
+          />
           {errors.Curso && (
             <p className="text-red-500 text-xs italic">Selecione o curso do aluno.</p>
           )}

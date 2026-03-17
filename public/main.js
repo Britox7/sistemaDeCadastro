@@ -21,7 +21,16 @@ ipcMain.handle('alunos:buscar', () => {
 })
 
 ipcMain.handle('alunos:cadastrar', (event, aluno) => {
-  return db.prepare('INSERT INTO alunos (nome, curso, dataNasc) VALUES (?, ?, ?)').run(aluno.nome, aluno.curso, aluno.dataNasc)
+  try {
+    const existe = db.prepare('SELECT * FROM alunos WHERE LOWER(nome) = LOWER(?)').get(aluno.nome);
+    if (existe) {
+      return JSON.stringify({ sucesso: false, erro: 'Aluno com esse nome já cadastrado.' });
+    }
+    db.prepare('INSERT INTO alunos (nome, curso, dataNasc) VALUES (?, ?, ?)').run(aluno.nome, aluno.curso, aluno.dataNasc);
+    return JSON.stringify({ sucesso: true });
+  } catch (e) {
+    return JSON.stringify({ sucesso: false, erro: e.message });
+  }
 })
 
 ipcMain.handle('alunos:excluir', (event, id) => {
