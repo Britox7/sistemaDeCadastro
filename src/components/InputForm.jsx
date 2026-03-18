@@ -25,6 +25,10 @@ const InputForm = () => {
     reset();
   };
 
+  const apenasLetras = (e) => {
+    if (/[^a-zA-ZÀ-ÿ\s]/.test(e.key)) e.preventDefault();
+  };
+
   return (
     <div className="w-[500px]">
       <form
@@ -36,17 +40,22 @@ const InputForm = () => {
             Nome Completo
           </label>
           <input
-            {...register("NomeCompleto", { required: true })}
-            onKeyPress={(e) => {
-              if (/[0-9]/.test(e.key)) e.preventDefault();
-            }}
+            {...register("NomeCompleto", {
+              required: "Nome completo é obrigatório",
+              validate: (value) => value.trim() !== '' || "Nome não pode ser apenas espaços",
+              pattern: {
+                value: /^[a-zA-ZÀ-ÿ\s]+$/,
+                message: "Nome não pode conter números ou caracteres especiais"
+              }
+            })}
+            onKeyPress={apenasLetras}
             className="shadow appearance-none border border-gray-400 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-base"
             id="NomeCompleto"
             type="text"
             placeholder="Informe o nome completo do aluno"
           />
           {errors.NomeCompleto && (
-            <p className="text-red-500 text-xs italic">Nome completo é obrigatório</p>
+            <p className="text-red-500 text-xs italic">{errors.NomeCompleto.message}</p>
           )}
         </div>
 
@@ -55,17 +64,22 @@ const InputForm = () => {
             Curso
           </label>
           <input
-            {...register("Curso", { required: true })}
-            onKeyPress={(e) => {
-              if (/[0-9]/.test(e.key)) e.preventDefault();
-            }}
+            {...register("Curso", {
+              required: "Curso é obrigatório",
+              validate: (value) => value.trim() !== '' || "Curso não pode ser apenas espaços",
+              pattern: {
+                value: /^[a-zA-ZÀ-ÿ\s]+$/,
+                message: "Curso não pode conter números ou caracteres especiais"
+              }
+            })}
+            onKeyPress={apenasLetras}
             className="text-base shadow appearance-none border border-gray-400 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="Curso"
             type="text"
             placeholder="Informe o curso do aluno"
           />
           {errors.Curso && (
-            <p className="text-red-500 text-xs italic">Selecione o curso do aluno.</p>
+            <p className="text-red-500 text-xs italic">{errors.Curso.message}</p>
           )}
         </div>
 
@@ -74,13 +88,13 @@ const InputForm = () => {
             Data de nascimento
           </label>
           <input
-            {...register("birthdate", { required: true })}
+            {...register("birthdate", { required: "Defina a data de nascimento do aluno." })}
             className="text-base shadow appearance-none border border-gray-400 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="birthdate"
             type="date"
           />
           {errors.birthdate && (
-            <p className="text-red-500 text-xs italic">Defina a data de nascimento do aluno.</p>
+            <p className="text-red-500 text-xs italic">{errors.birthdate.message}</p>
           )}
         </div>
 
