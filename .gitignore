@@ -8,10 +8,10 @@
 # testing
 /coverage
 
-# production (React)
+# production
 /build
 
-# electron build (IMPORTANTE)
+# electron build
 /dist
 /linux-unpacked
 *.AppImage
