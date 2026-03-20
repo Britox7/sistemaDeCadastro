@@ -8,8 +8,15 @@
 # testing
 /coverage
 
-# production
+# production (React)
 /build
+
+# electron build (IMPORTANTE)
+/dist
+/linux-unpacked
+*.AppImage
+*.deb
+*.asar
 
 # misc
 .DS_Store
