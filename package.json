@@ -46,7 +46,7 @@
   "build": {
     "appId": "com.uniateneu.aniversariantes",
     "productName": "Aniversariantes UniATENEU",
-    "icon":"public/logo.png",
+    "icon": "public/logo512.png",
     "extraMetadata": {
       "main": "build/main.js"
     },
