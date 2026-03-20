@@ -1,6 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
-const isDev = require('electron-is-dev')
 const Database = require('better-sqlite3')
 
 require('@electron/remote/main').initialize()
@@ -42,6 +41,8 @@ ipcMain.handle('alunos:editar', (event, aluno) => {
 })
 
 function createWindow() {
+  const isDev = !app.isPackaged;
+
   const win = new BrowserWindow({
     minWidth: 800,
     minHeight: 740,
@@ -56,11 +57,13 @@ function createWindow() {
 
   win.maximize()
 
-  win.loadURL(
-    isDev
-      ? 'http://localhost:3000'
-      : `file://${path.join(__dirname, '../build/index.html')}`
-  )
+  const indexPath = isDev
+    ? 'http://localhost:3000'
+    : `file://${path.resolve(__dirname, '..', 'build', 'index.html')}`;
+
+  console.log('Carregando:', indexPath);
+
+  win.loadURL(indexPath);
 }
 
 app.on('ready', createWindow)
