@@ -2,7 +2,7 @@ import logo from "../images/logo.png";
 
 function Title({ pageTitle }) {
   return (
-    <div className="flex flex-col pt-6">
+    <div className="flex flex-col pt-6 mt-10">
       
       <h1 className="font-['Oswald'] text-3xl pb-1">
         {pageTitle}
