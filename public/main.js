@@ -1,6 +1,8 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, Tray, Menu, Notification } = require('electron')
 const path = require('path')
 const Database = require('better-sqlite3')
+
+app.setAppUserModelId('com.uniateneu.aniversariantes')
 
 require('@electron/remote/main').initialize()
 
@@ -40,10 +42,38 @@ ipcMain.handle('alunos:editar', (event, aluno) => {
   return db.prepare('UPDATE alunos SET nome = ?, curso = ?, dataNasc = ? WHERE id = ?').run(aluno.nome, aluno.curso, aluno.dataNasc, aluno.id)
 })
 
+let tray = null
+let win = null
+
+function verificarAniversarios() {
+  const hoje = new Date()
+  const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0')
+  const diaHoje = String(hoje.getDate()).padStart(2, '0')
+
+  const alunos = db.prepare('SELECT * FROM alunos').all()
+  const aniversariantes = alunos.filter((aluno) => {
+    const [, mes, dia] = aluno.dataNasc.split('-')
+    return mes === mesHoje && dia === diaHoje
+  })
+
+  if (aniversariantes.length > 0) {
+    const nomes = aniversariantes.map((a) => a.nome).join(', ')
+    new Notification({
+      title: '🎂 Aniversariantes hoje!',
+      body: `${aniversariantes.length} aluno(s) fazem aniversário hoje: ${nomes}`,
+      icon: path.join(__dirname, 'logo512_new.png')
+    }).show()
+
+    if (tray) {
+      tray.setToolTip(`${aniversariantes.length} aniversariante(s) hoje!`)
+    }
+  }
+}
+
 function createWindow() {
   const isDev = !app.isPackaged;
 
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     minWidth: 800,
     minHeight: 740,
     webPreferences: {
@@ -57,20 +87,64 @@ function createWindow() {
 
   win.maximize()
 
+  app.setLoginItemSettings({
+    openAtLogin: true
+  })
+
   const indexPath = isDev
     ? 'http://localhost:3000'
     : `file://${path.resolve(__dirname, '..', 'build', 'index.html')}`;
 
-  console.log('Carregando:', indexPath);
-
   win.loadURL(indexPath);
+
+  win.on('close', (event) => {
+    if (!app.isQuitting) {
+      event.preventDefault()
+      win.hide()
+    }
+  })
 }
 
-app.on('ready', createWindow)
+function createTray() {
+  const iconPath = path.join(__dirname, 'logo512_new.png')
+  tray = new Tray(iconPath)
+
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Abrir',
+      click: () => {
+        win.show()
+      }
+    },
+    {
+      label: 'Fechar',
+      click: () => {
+        app.isQuitting = true
+        app.quit()
+      }
+    }
+  ])
+
+  tray.setToolTip('Aniversariantes UniATENEU')
+  tray.setContextMenu(contextMenu)
+
+  tray.on('click', () => {
+    win.show()
+  })
+}
+
+app.on('ready', () => {
+  createWindow()
+  createTray()
+
+  verificarAniversarios()
+
+  setInterval(verificarAniversarios, 60 * 60 * 1000)
+})
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
-    app.quit()
+    // Não fecha o app, apenas esconde
   }
 })
 
