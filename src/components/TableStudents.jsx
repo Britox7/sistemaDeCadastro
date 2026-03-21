@@ -60,7 +60,7 @@ function TableStudents({ dropdown, filtro }) {
   const studentsPage = alunosFiltrados.slice(start, start + ITEMS_PER_PAGE);
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="w-full px-4 max-w-5xl mx-auto">
       <div className="flex items-center gap-4 mb-4">
         <BackButton />
         {dropdown}
@@ -68,7 +68,7 @@ function TableStudents({ dropdown, filtro }) {
 
       {editando && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 w-96 flex flex-col gap-4 shadow-xl">
+          <div className="bg-white rounded-xl p-6 w-full max-w-sm flex flex-col gap-4 shadow-xl mx-4">
             <h2 className="text-lg font-bold text-gray-700">Editar Aluno</h2>
             <div>
               <label className="text-sm font-bold text-gray-700">Nome Completo</label>

@@ -1,6 +1,6 @@
 function ContainerGeral({ children }) {
   return (
-    <div className="w-screen min-h-screen bg-blue-600 flex flex-col justify-between items-center">
+    <div className="w-full min-h-screen bg-blue-600 flex flex-col justify-between items-center overflow-x-hidden">
       {children}
     </div>
   );
