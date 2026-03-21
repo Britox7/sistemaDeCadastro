@@ -10,7 +10,7 @@ const meses = [
   "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
 ];
 
-function TableStudents({ dropdown, filtro }) {
+function TableStudents({ dropdown, filtro, filtroHoje, onAlunosChange }) {
   const [alunos, setAlunos] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [editando, setEditando] = useState(null);
@@ -22,6 +22,7 @@ function TableStudents({ dropdown, filtro }) {
   async function carregarAlunos() {
     const dados = await window.api.buscarAlunos();
     setAlunos(dados);
+    if (onAlunosChange) onAlunosChange(dados);
   }
 
   async function handleDelete(id) {
@@ -36,6 +37,19 @@ function TableStudents({ dropdown, filtro }) {
   }
 
   function filtrarAlunos() {
+    if (filtroHoje) {
+      const hoje = new Date()
+      const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0')
+      const diaHoje = String(hoje.getDate()).padStart(2, '0')
+
+      return alunos
+        .filter((aluno) => {
+          const [, mes, dia] = aluno.dataNasc.split('-')
+          return mes === mesHoje && dia === diaHoje
+        })
+        .sort((a, b) => a.nome.localeCompare(b.nome));
+    }
+
     if (!filtro) return [...alunos].sort((a, b) => a.nome.localeCompare(b.nome));
 
     const mesSelecionado = meses.indexOf(filtro) + 1;
