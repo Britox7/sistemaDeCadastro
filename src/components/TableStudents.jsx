@@ -17,7 +17,7 @@ function TableStudents({ dropdown, filtro, filtroHoje, onAlunosChange }) {
 
   useEffect(() => {
     carregarAlunos();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, []);
 
   async function carregarAlunos() {

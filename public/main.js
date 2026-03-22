@@ -58,11 +58,19 @@ function verificarAniversarios() {
 
   if (aniversariantes.length > 0) {
     const nomes = aniversariantes.map((a) => a.nome).join(', ')
-    new Notification({
+
+    const notification = new Notification({
       title: '🎂 Aniversariantes hoje!',
       body: `${aniversariantes.length} aluno(s) fazem aniversário hoje: ${nomes}`,
       icon: path.join(__dirname, 'logo512_new.png')
-    }).show()
+    })
+
+    notification.on('click', () => {
+      win.show()
+      win.webContents.send('navegar-para-cadastrados')
+    })
+
+    notification.show()
 
     if (tray) {
       tray.setToolTip(`${aniversariantes.length} aniversariante(s) hoje!`)
@@ -147,7 +155,7 @@ app.on('ready', () => {
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
-    // Não fecha o app, apenas esconde
+    
   }
 })
 

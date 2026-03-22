@@ -5,4 +5,5 @@ contextBridge.exposeInMainWorld('api', {
   cadastrarAluno: (aluno) => ipcRenderer.invoke('alunos:cadastrar', aluno),
   excluirAluno: (id) => ipcRenderer.invoke('alunos:excluir', id),
   editarAluno: (aluno) => ipcRenderer.invoke('alunos:editar', aluno),
+  onNavegar: (callback) => ipcRenderer.on('navegar-para-cadastrados', callback),
 })
