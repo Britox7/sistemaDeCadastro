@@ -148,8 +148,12 @@ app.on('ready', () => {
   createWindow()
   createTray()
 
-  verificarAniversarios()
+  
+  if (!app.getLoginItemSettings().wasOpenedAtLogin) {
+    win.show()
+  }
 
+  verificarAniversarios()
   setInterval(verificarAniversarios, 60 * 60 * 1000)
 })
 
