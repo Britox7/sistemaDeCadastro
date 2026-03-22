@@ -86,8 +86,6 @@ function createWindow() {
 
   require('@electron/remote/main').enable(win.webContents)
 
-  win.maximize()
-
   app.setLoginItemSettings({
     openAtLogin: true
   })
@@ -97,6 +95,10 @@ function createWindow() {
     : `file://${path.resolve(__dirname, '..', 'build', 'index.html')}`;
 
   win.loadURL(indexPath);
+
+  win.on('show', () => {
+    win.maximize()
+  })
 
   win.on('close', (event) => {
     if (!app.isQuitting) {
