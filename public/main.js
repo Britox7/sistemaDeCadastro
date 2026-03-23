@@ -4,6 +4,19 @@ const Database = require('better-sqlite3')
 
 app.setAppUserModelId('com.uniateneu.aniversariantes')
 
+const gotTheLock = app.requestSingleInstanceLock()
+
+if (!gotTheLock) {
+  app.quit()
+} else {
+  app.on('second-instance', () => {
+    if (win) {
+      win.show()
+      win.focus()
+    }
+  })
+}
+
 require('@electron/remote/main').initialize()
 
 const db = new Database(path.join(app.getPath('userData'), 'database.db'))
