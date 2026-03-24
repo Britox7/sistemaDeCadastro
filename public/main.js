@@ -4,6 +4,10 @@ const Database = require('better-sqlite3')
 
 app.setAppUserModelId('com.uniateneu.aniversariantes')
 
+if (process.platform === 'win32') {
+  app.setAppUserModelId(app.name)
+}
+
 const gotTheLock = app.requestSingleInstanceLock()
 
 if (!gotTheLock) {
@@ -75,7 +79,9 @@ function verificarAniversarios() {
     const notification = new Notification({
       title: '🎂 Aniversariantes hoje!',
       body: `${aniversariantes.length} aluno(s) fazem aniversário hoje: ${nomes}`,
-      icon: path.join(__dirname, 'logo512_new.png')
+      icon: path.join(__dirname, 'logo512_new.png'),
+      silent: false,
+      urgency: 'critical'
     })
 
     notification.on('click', () => {
@@ -161,7 +167,6 @@ app.on('ready', () => {
   createWindow()
   createTray()
 
-  
   if (!app.getLoginItemSettings().wasOpenedAtLogin) {
     win.show()
   }
@@ -172,7 +177,7 @@ app.on('ready', () => {
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
-    
+    // Não fecha o app, apenas esconde
   }
 })
 
