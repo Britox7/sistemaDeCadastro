@@ -5,52 +5,41 @@ import FormButton from './FormButton';
 import FormButtonTwo from './FormButtonTwo';
 
 const cursosPorModalidade = {
-  Licenciatura: [
-    "Educação Física",
-    "História",
-    "Letras",
-    "Matemática",
-    "Pedagogia",
+  "UniAteneu (Graduação)": [
+    "Administração", "Arquitetura", "Ciências Contábeis", "Ciências Econômicas",
+    "Engenharia de Produção", "Engenharia de Software", "Engenharia Civil",
+    "Serviço Social", "Teologia", "Educação Física", "História", "Letras",
+    "Matemática", "Pedagogia"
   ],
-  Bacharelado: [
-    "Administração",
-    "Arquitetura",
-    "Ciências Contábeis",
-    "Ciências Econômicas",
-    "Engenharia de Produção",
-    "Engenharia de Software",
-    "Engenharia Civil",
-    "Serviço Social",
-    "Teologia",
+  "Faconnect (Graduação)": [
+    "Administração", "Arquitetura", "Ciências Contábeis", "Ciências Econômicas",
+    "Engenharia de Produção", "Engenharia de Software", "Engenharia Civil",
+    "Serviço Social", "Teologia", "Educação Física", "História", "Letras",
+    "Matemática", "Pedagogia",
   ],
-  Tecnólogo: [
-    "Análise e Desenvolvimento de Sistemas",
-    "Comércio Exterior",
-    "Gestão Ambiental",
-    "Gestão Comercial",
-    "Gestão da Qualidade",
-    "Gestão de Recursos Humanos",
-    "Gestão Financeira",
-    "Gestão Hospitalar",
-    "Gestão Portuária",
-    "Gestão Pública",
-    "Logística",
-    "Marketing",
-    "Marketing Digital",
-    "Processos Gerenciais",
-    "Redes de Computadores",
-    "Gestão da Tecnologia da Informação",
-    "Inteligência de Dados",
+  "UniBTA (Graduação)": [
+    "Administração", "Arquitetura", "Ciências Contábeis", "Ciências Econômicas",
+    "Engenharia de Produção", "Engenharia de Software", "Engenharia Civil",
+    "Serviço Social", "Teologia", "Educação Física", "História", "Letras",
+    "Matemática", "Pedagogia",
   ],
-  "Curso Técnico": [
-    "Administração",
-    "Logística",
-    "Marketing",
-    "Recursos Humanos",
-    "Serviços Jurídicos",
-    "Segurança do Trabalho",
-    "Secretariado Escolar",
-    "Transações Imobiliárias",
+  "UniAteneu (Técnicos)": [
+    "Análise e Desenvolvimento de Sistemas", "Comércio Exterior", "Gestão Ambiental",
+    "Gestão Comercial", "Gestão da Qualidade", "Gestão de Recursos Humanos",
+    "Gestão Financeira", "Gestão Hospitalar", "Gestão Portuária", "Gestão Pública",
+    "Logística", "Marketing", "Marketing Digital", "Processos Gerenciais",
+    "Redes de Computadores", "Gestão da Tecnologia da Informação", "Inteligência de Dados",
+    "Administração", "Recursos Humanos", "Serviços Jurídicos", "Segurança do Trabalho",
+    "Secretariado Escolar", "Transações Imobiliárias"
+  ],
+  "PHTech (Técnicos)": [
+    "Análise e Desenvolvimento de Sistemas", "Comércio Exterior", "Gestão Ambiental",
+    "Gestão Comercial", "Gestão da Qualidade", "Gestão de Recursos Humanos",
+    "Gestão Financeira", "Gestão Hospitalar", "Gestão Portuária", "Gestão Pública",
+    "Logística", "Marketing", "Marketing Digital", "Processos Gerenciais",
+    "Redes de Computadores", "Gestão da Tecnologia da Informação", "Inteligência de Dados",
+    "Administração", "Recursos Humanos", "Serviços Jurídicos", "Segurança do Trabalho",
+    "Secretariado Escolar", "Transações Imobiliárias"
   ],
 };
 
@@ -58,11 +47,16 @@ const InputForm = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm();
   const [modalidadeSelecionada, setModalidadeSelecionada] = useState("");
+  const [cursoSelecionado, setCursoSelecionado] = useState("");
+  const [dropdownAberto, setDropdownAberto] = useState(false);
+  const [dropdownModalidadeAberto, setDropdownModalidadeAberto] = useState(false);
 
   const onSubmit = async (data) => {
+    const nomeFaculdade = modalidadeSelecionada.split(' (')[0];
+
     const retorno = await window.api.cadastrarAluno({
       nome: data.NomeCompleto,
-      curso: data.Curso,
+      curso: `${data.Curso} (${nomeFaculdade})`,
       dataNasc: data.birthdate
     });
 
@@ -75,19 +69,34 @@ const InputForm = () => {
 
     reset();
     setModalidadeSelecionada("");
+    setCursoSelecionado("");
+    setDropdownAberto(false);
+    setDropdownModalidadeAberto(false);
   };
 
   const apenasLetras = (e) => {
     if (/[^a-zA-ZÀ-ÿ\s]/.test(e.key)) e.preventDefault();
   };
 
+  function handleCursoSelect(curso) {
+    setCursoSelecionado(curso);
+    setValue("Curso", curso);
+    setDropdownAberto(false);
+  }
+
+  function handleModalidadeSelect(modalidade) {
+    setModalidadeSelecionada(modalidade);
+    setValue("Curso", "");
+    setCursoSelecionado("");
+    setDropdownModalidadeAberto(false);
+  }
+
   return (
-    <div className="w-[500px]">
+    <div className="w-full max-w-lg px-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white shadow-md rounded-xl px-8 pt-6 pb-8 mb-4 flex flex-col gap-4"
       >
-        {/* Nome Completo */}
         <div>
           <label className="text-base text-left block text-gray-700 text-sm font-bold mb-2" htmlFor="NomeCompleto">
             Nome Completo
@@ -112,57 +121,99 @@ const InputForm = () => {
           )}
         </div>
 
-        {/* Modalidade */}
+        {/* Faculdade / Modalidade - dropdown customizado */}
         <div>
           <label className="text-base text-left block text-gray-700 text-sm font-bold mb-2">
-            Modalidade
+            Faculdade / Modalidade
           </label>
-          <select
-            className="shadow border border-gray-400 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-base"
-            value={modalidadeSelecionada}
-            onChange={(e) => {
-              setModalidadeSelecionada(e.target.value);
-              setValue("Curso", "");
-            }}
-          >
-            <option value="">Selecione a modalidade</option>
-            {Object.keys(cursosPorModalidade).map((modalidade) => (
-              <option key={modalidade} value={modalidade}>{modalidade}</option>
-            ))}
-          </select>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setDropdownModalidadeAberto(!dropdownModalidadeAberto)}
+              className="shadow border border-gray-400 rounded w-full py-2 px-3 text-left text-base leading-tight focus:outline-none text-gray-700 bg-white hover:bg-gray-50"
+            >
+              {modalidadeSelecionada || "Selecione a faculdade / modalidade"}
+              <span className="float-right">▼</span>
+            </button>
+
+            {dropdownModalidadeAberto && (
+              <div className="absolute z-50 w-full bg-white border border-gray-400 rounded shadow-lg max-h-48 overflow-y-auto">
+                {Object.keys(cursosPorModalidade).map((modalidade) => (
+                  <button
+                    key={modalidade}
+                    type="button"
+                    onClick={() => handleModalidadeSelect(modalidade)}
+                    className={`w-full text-left px-3 py-2 text-sm hover:bg-blue-100 ${modalidadeSelecionada === modalidade ? "bg-blue-200 font-medium" : ""}`}
+                  >
+                    {modalidade}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          {errors.NomeCompleto && (
+            <p className="text-red-500 text-xs italic">{errors.NomeCompleto.message}</p>
+          )}
         </div>
 
-        {/* Curso */}
+        {/* Curso - dropdown customizado */}
         <div>
           <label className="text-base text-left block text-gray-700 text-sm font-bold mb-2" htmlFor="Curso">
             Curso
           </label>
-          <select
-            {...register("Curso", { required: "Selecione o curso do aluno." })}
-            disabled={!modalidadeSelecionada}
-            className={`shadow border border-gray-400 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-base ${!modalidadeSelecionada ? "opacity-50 cursor-not-allowed" : ""}`}
-            id="Curso"
-          >
-            <option value="">Selecione o curso</option>
-            {modalidadeSelecionada && cursosPorModalidade[modalidadeSelecionada].map((curso) => (
-              <option key={curso} value={curso}>{curso}</option>
-            ))}
-          </select>
+          <input type="hidden" {...register("Curso", { required: "Selecione o curso do aluno." })} />
+          <div className="relative">
+            <button
+              type="button"
+              disabled={!modalidadeSelecionada}
+              onClick={() => setDropdownAberto(!dropdownAberto)}
+              className={`shadow border border-gray-400 rounded w-full py-2 px-3 text-left text-base leading-tight focus:outline-none ${!modalidadeSelecionada ? "opacity-50 cursor-not-allowed text-gray-400" : "text-gray-700 bg-white hover:bg-gray-50"}`}
+            >
+              {cursoSelecionado || "Selecione o curso"}
+              <span className="float-right">▼</span>
+            </button>
+
+            {dropdownAberto && modalidadeSelecionada && (
+              <div className="absolute z-50 w-full bg-white border border-gray-400 rounded shadow-lg max-h-48 overflow-y-auto">
+                {cursosPorModalidade[modalidadeSelecionada].map((curso) => (
+                  <button
+                    key={curso}
+                    type="button"
+                    onClick={() => handleCursoSelect(curso)}
+                    className={`w-full text-left px-3 py-2 text-sm hover:bg-blue-100 ${cursoSelecionado === curso ? "bg-blue-200 font-medium" : ""}`}
+                  >
+                    {curso}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           {errors.Curso && (
             <p className="text-red-500 text-xs italic">{errors.Curso.message}</p>
           )}
         </div>
 
-        {/* Data de Nascimento */}
         <div>
           <label className="text-base text-left block text-gray-700 text-sm font-bold mb-2" htmlFor="birthdate">
             Data de nascimento
           </label>
           <input
-            {...register("birthdate", { required: "Defina a data de nascimento do aluno." })}
+            {...register("birthdate", {
+              required: "Defina a data de nascimento do aluno.",
+              validate: (value) => {
+                const data = new Date(value);
+                const hoje = new Date();
+                if (isNaN(data.getTime())) return "Data inválida";
+                if (data > hoje) return "Data não pode ser no futuro";
+                if (data.getFullYear() < 1900) return "Data inválida";
+                return true;
+              }
+            })}
             className="text-base shadow appearance-none border border-gray-400 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="birthdate"
             type="date"
+            max={new Date().toISOString().split('T')[0]}
+            min="1900-01-01"
           />
           {errors.birthdate && (
             <p className="text-red-500 text-xs italic">{errors.birthdate.message}</p>
