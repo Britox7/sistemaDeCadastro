@@ -5,17 +5,16 @@ import FormButton from './FormButton';
 import FormButtonTwo from './FormButtonTwo';
 
 const cursosPorModalidade = {
-  "UniAteneu (Graduação)": [
-    "Administração", "Arquitetura", "Ciências Contábeis", "Ciências Econômicas",
-    "Engenharia de Produção", "Engenharia de Software", "Engenharia Civil",
-    "Serviço Social", "Teologia", "Educação Física", "História", "Letras",
-    "Matemática", "Pedagogia"
+  "UniAteneu Semipresencial (Graduação)": [
+    "Pedagogia 01/2022", "Pedagogia 02/2023.2", "Pedagogia 03/2025.1", "Pedagogia 04/2025.2", "Pedagogia 05/2026.1", "Educação Física", "Terapia Ocupacional",
+    "Fisioterapia", "Farmácia"
+  ],
+  "UniAteneu Online (Graduação)": [
+  "Pedagogia 01 - 2021.1","Pedagogia 02 - 2022.1","Pedagogia 03 - 2024.1","Administração","Ciências contábeis","Serviço social","Engenharia de software","ADS",
+  "Secretário escolar","EJA"
   ],
   "Faconnect (Graduação)": [
-    "Administração", "Arquitetura", "Ciências Contábeis", "Ciências Econômicas",
-    "Engenharia de Produção", "Engenharia de Software", "Engenharia Civil",
-    "Serviço Social", "Teologia", "Educação Física", "História", "Letras",
-    "Matemática", "Pedagogia",
+    "Pedagogia Semi 2023.1", "Pós graduação"
   ],
   "UniBTA (Graduação)": [
     "Administração", "Arquitetura", "Ciências Contábeis", "Ciências Econômicas",
@@ -33,13 +32,7 @@ const cursosPorModalidade = {
     "Secretariado Escolar", "Transações Imobiliárias"
   ],
   "PHTech (Técnicos)": [
-    "Análise e Desenvolvimento de Sistemas", "Comércio Exterior", "Gestão Ambiental",
-    "Gestão Comercial", "Gestão da Qualidade", "Gestão de Recursos Humanos",
-    "Gestão Financeira", "Gestão Hospitalar", "Gestão Portuária", "Gestão Pública",
-    "Logística", "Marketing", "Marketing Digital", "Processos Gerenciais",
-    "Redes de Computadores", "Gestão da Tecnologia da Informação", "Inteligência de Dados",
-    "Administração", "Recursos Humanos", "Serviços Jurídicos", "Segurança do Trabalho",
-    "Secretariado Escolar", "Transações Imobiliárias"
+    "Técnico em enfermagem 05", "Técnico em enfermagem 07", "Secretariado Escolar"
   ],
 };
 
