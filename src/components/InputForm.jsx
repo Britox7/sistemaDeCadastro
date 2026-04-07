@@ -23,16 +23,10 @@ const cursosPorModalidade = {
     "Matemática", "Pedagogia",
   ],
   "UniAteneu (Técnicos)": [
-    "Análise e Desenvolvimento de Sistemas", "Comércio Exterior", "Gestão Ambiental",
-    "Gestão Comercial", "Gestão da Qualidade", "Gestão de Recursos Humanos",
-    "Gestão Financeira", "Gestão Hospitalar", "Gestão Portuária", "Gestão Pública",
-    "Logística", "Marketing", "Marketing Digital", "Processos Gerenciais",
-    "Redes de Computadores", "Gestão da Tecnologia da Informação", "Inteligência de Dados",
-    "Administração", "Recursos Humanos", "Serviços Jurídicos", "Segurança do Trabalho",
-    "Secretariado Escolar", "Transações Imobiliárias"
+    "Técnico em enfermagem"
   ],
   "PHTech (Técnicos)": [
-    "Técnico em enfermagem 05", "Técnico em enfermagem 07", "Secretariado Escolar"
+    "Técnico em enfermagem 05", "Técnico em enfermagem 07", "Secretariado Escolar", "Técnico em saúde bucal", "Técnico em agropecuária"
   ],
 };
 
