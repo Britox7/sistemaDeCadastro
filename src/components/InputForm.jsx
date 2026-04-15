@@ -6,7 +6,7 @@ import FormButtonTwo from './FormButtonTwo';
 
 const cursosPorModalidade = {
   "UniAteneu Semipresencial (Graduação)": [
-    "Pedagogia 01/2022", "Pedagogia 02/2023.2", "Pedagogia 03/2025.1", "Pedagogia 04/2025.2", "Pedagogia 05/2026.1", "Educação Física", "Terapia Ocupacional",
+    "Pedagogia 01/2022", "Pedagogia 02/2023.2", "Pedagogia 03/2025.1", "Pedagogia 04/2025.2", "Pedagogia 05/2026.1", "Educação Física", "Terapia Ocupacional 01", "Terapia Ocupacional 02",
     "Fisioterapia", "Farmácia"
   ],
   "UniAteneu Online (Graduação)": [
