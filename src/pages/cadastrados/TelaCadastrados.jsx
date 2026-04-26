@@ -10,18 +10,27 @@ function TelaCadastrados() {
   const [filtroHoje, setFiltroHoje] = useState(false);
   const [totalHoje, setTotalHoje] = useState(0);
 
-  function handleAlunosChange(alunos) {
-    const hoje = new Date();
-    const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0');
-    const diaHoje = String(hoje.getDate()).padStart(2, '0');
+   function handleAlunosChange(alunos) {
+     // Handle case when alunos is not an array
+     if (!Array.isArray(alunos)) {
+       console.error('Expected alunos to be an array but received:', alunos);
+       setTotalHoje(0);
+       return;
+     }
 
-    const total = alunos.filter((aluno) => {
-      const [, mes, dia] = aluno.dataNasc.split('-');
-      return mes === mesHoje && dia === diaHoje;
-    }).length;
+     const hoje = new Date();
+     const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0');
+     const diaHoje = String(hoje.getDate()).padStart(2, '0');
 
-    setTotalHoje(total);
-  }
+     const total = alunos.filter((aluno) => {
+       // Handle case when aluno or aluno.dataNasc is undefined
+       if (!aluno || !aluno.dataNasc) return false;
+       const [, mes, dia] = aluno.dataNasc.split('-');
+       return mes === mesHoje && dia === diaHoje;
+     }).length;
+
+     setTotalHoje(total);
+   }
 
   function handleFiltroHoje() {
     setFiltroHoje(!filtroHoje);

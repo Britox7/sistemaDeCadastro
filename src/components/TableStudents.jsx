@@ -20,11 +20,27 @@ function TableStudents({ dropdown, filtro, filtroHoje, onAlunosChange }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function carregarAlunos() {
-    const dados = await window.api.buscarAlunos();
-    setAlunos(dados);
-    if (onAlunosChange) onAlunosChange(dados);
-  }
+   async function carregarAlunos() {
+     const dados = await window.api.buscarAlunos();
+     // Parse JSON string to array if needed
+     let alunosArray = [];
+     if (typeof dados === 'string') {
+       try {
+         alunosArray = JSON.parse(dados);
+       } catch (e) {
+         console.error('Error parsing alunos JSON:', e);
+         alunosArray = [];
+       }
+     } else if (Array.isArray(dados)) {
+       alunosArray = dados;
+     }
+     // Ensure it's an array
+     if (!Array.isArray(alunosArray)) {
+       alunosArray = [];
+     }
+     setAlunos(alunosArray);
+     if (onAlunosChange) onAlunosChange(alunosArray);
+   }
 
   async function handleDelete(id) {
     await window.api.excluirAluno(id);
@@ -32,42 +48,93 @@ function TableStudents({ dropdown, filtro, filtroHoje, onAlunosChange }) {
   }
 
   async function handleEditSave() {
+    // Validate name uniqueness (case-insensitive)
+    const nomeExistente = alunos.find(
+      (aluno) => 
+        aluno.id !== editando.id && 
+        aluno.nome.toLowerCase() === editando.nome.toLowerCase()
+    );
+    
+    if (nomeExistente) {
+      alert('Já existe um aluno cadastrado com este nome.');
+      return;
+    }
+    
+    // Validate date of birth
+    const dataNasc = new Date(editando.dataNasc);
+    const anoAtual = new Date().getFullYear();
+    
+    if (dataNasc.getFullYear() < 1900 || dataNasc.getFullYear() > anoAtual) {
+      alert('A data de nascimento deve ser entre 1900 e o ano atual.');
+      return;
+    }
+    
     await window.api.editarAluno(editando);
     setEditando(null);
     carregarAlunos();
   }
 
-  function filtrarAlunos() {
-    if (filtroHoje) {
-      const hoje = new Date()
-      const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0')
-      const diaHoje = String(hoje.getDate()).padStart(2, '0')
+   function filtrarAlunos() {
+     // Handle case when alunos is undefined or null
+     if (!alunos || !Array.isArray(alunos)) {
+       return [];
+     }
 
-      return alunos
-        .filter((aluno) => {
-          const [, mes, dia] = aluno.dataNasc.split('-')
-          return mes === mesHoje && dia === diaHoje
-        })
-        .sort((a, b) => a.nome.localeCompare(b.nome));
-    }
+     if (filtroHoje) {
+       const hoje = new Date()
+       const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0')
+       const diaHoje = String(hoje.getDate()).padStart(2, '0')
 
-    if (!filtro) return [...alunos].sort((a, b) => a.nome.localeCompare(b.nome));
+       return alunos
+         .filter((aluno) => {
+           // Handle case when aluno or aluno.dataNasc is undefined
+           if (!aluno || !aluno.dataNasc) return false;
+           const [, mes, dia] = aluno.dataNasc.split('-')
+           return mes === mesHoje && dia === diaHoje
+         })
+         .sort((a, b) => {
+           // Handle case when a or b or their nome properties are undefined
+           if (!a || !a.nome) return -1;
+           if (!b || !b.nome) return 1;
+           return a.nome.localeCompare(b.nome);
+         });
+     }
 
-    const mesSelecionado = meses.indexOf(filtro) + 1;
+     if (!filtro) {
+       return [...alunos]
+         .filter(aluno => aluno && aluno.nome) // Filter out invalid entries
+         .sort((a, b) => {
+           if (!a || !a.nome) return -1;
+           if (!b || !b.nome) return 1;
+           return a.nome.localeCompare(b.nome);
+         });
+     }
 
-    return alunos
-      .filter((aluno) => {
-        const [, mes] = aluno.dataNasc.split('-');
-        return Number(mes) === mesSelecionado;
-      })
-      .sort((a, b) => {
-        const [, mesA, diaA] = a.dataNasc.split('-');
-        const [, mesB, diaB] = b.dataNasc.split('-');
-        if (Number(mesA) !== Number(mesB)) return Number(mesA) - Number(mesB);
-        if (Number(diaA) !== Number(diaB)) return Number(diaA) - Number(diaB);
-        return a.nome.localeCompare(b.nome);
-      });
-  }
+     const mesSelecionado = meses.indexOf(filtro) + 1;
+
+     return alunos
+       .filter((aluno) => {
+         // Handle case when aluno or aluno.dataNasc is undefined
+         if (!aluno || !aluno.dataNasc) return false;
+         const [, mes] = aluno.dataNasc.split('-');
+         return Number(mes) === mesSelecionado;
+       })
+       .sort((a, b) => {
+         // Handle case when a or b or their dataNasc properties are undefined
+         if (!a || !a.dataNasc) return -1;
+         if (!b || !b.dataNasc) return 1;
+         
+         const [, mesA, diaA] = a.dataNasc.split('-');
+         const [, mesB, diaB] = b.dataNasc.split('-');
+         if (Number(mesA) !== Number(mesB)) return Number(mesA) - Number(mesB);
+         if (Number(diaA) !== Number(diaB)) return Number(diaA) - Number(diaB);
+         
+         // Handle case when a or b or their nome properties are undefined
+         if (!a || !a.nome) return -1;
+         if (!b || !b.nome) return 1;
+         return a.nome.localeCompare(b.nome);
+       });
+   }
 
   const alunosFiltrados = filtrarAlunos();
   const totalPages = Math.ceil(alunosFiltrados.length / ITEMS_PER_PAGE);

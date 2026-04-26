@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain, Tray, Menu, Notification } = require('electron')
 const path = require('path')
-const Database = require('better-sqlite3')
+const dbUtils = require('../src/utils/database')
 
 app.setAppUserModelId('com.uniateneu.aniversariantes')
 
@@ -23,55 +23,27 @@ if (!gotTheLock) {
 
 require('@electron/remote/main').initialize()
 
-const db = new Database(path.join(app.getPath('userData'), 'database.db'))
-
-db.exec(`
-  CREATE TABLE IF NOT EXISTS alunos (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT NOT NULL,
-    curso TEXT NOT NULL,
-    dataNasc TEXT NOT NULL
-  )
-`)
-
 ipcMain.handle('alunos:buscar', () => {
-  return db.prepare('SELECT * FROM alunos').all()
+  return dbUtils.getAlunos()
 })
 
 ipcMain.handle('alunos:cadastrar', (event, aluno) => {
-  try {
-    const existe = db.prepare('SELECT * FROM alunos WHERE LOWER(nome) = LOWER(?)').get(aluno.nome);
-    if (existe) {
-      return JSON.stringify({ sucesso: false, erro: 'Aluno com esse nome já cadastrado.' });
-    }
-    db.prepare('INSERT INTO alunos (nome, curso, dataNasc) VALUES (?, ?, ?)').run(aluno.nome, aluno.curso, aluno.dataNasc);
-    return JSON.stringify({ sucesso: true });
-  } catch (e) {
-    return JSON.stringify({ sucesso: false, erro: e.message });
-  }
+  return dbUtils.createAluno(aluno)
 })
 
 ipcMain.handle('alunos:excluir', (event, id) => {
-  return db.prepare('DELETE FROM alunos WHERE id = ?').run(id)
+  return dbUtils.deleteAluno(id)
 })
 
 ipcMain.handle('alunos:editar', (event, aluno) => {
-  return db.prepare('UPDATE alunos SET nome = ?, curso = ?, dataNasc = ? WHERE id = ?').run(aluno.nome, aluno.curso, aluno.dataNasc, aluno.id)
+  return dbUtils.updateAluno(aluno)
 })
 
 let tray = null
 let win = null
 
 function verificarAniversarios() {
-  const hoje = new Date()
-  const mesHoje = String(hoje.getMonth() + 1).padStart(2, '0')
-  const diaHoje = String(hoje.getDate()).padStart(2, '0')
-
-  const alunos = db.prepare('SELECT * FROM alunos').all()
-  const aniversariantes = alunos.filter((aluno) => {
-    const [, mes, dia] = aluno.dataNasc.split('-')
-    return mes === mesHoje && dia === diaHoje
-  })
+  const aniversariantes = dbUtils.getAniversariantes()
 
   if (aniversariantes.length > 0) {
     const nomes = aniversariantes.map((a) => a.nome).join(', ')
