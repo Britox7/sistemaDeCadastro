@@ -20,13 +20,11 @@ jobs:
         with:
           node-version: 20
 
+      - name: Forçar HTTPS no lugar de SSH
+        run: git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
+
       - name: Install dependencies
         run: yarn install --ignore-engines
-        env:
-          ELECTRON_SKIP_BINARY_DOWNLOAD: 1
-
-      - name: Rebuild better-sqlite3
-        run: npx electron-rebuild -f -w better-sqlite3
 
       - name: Build Linux
         run: yarn electron:build
@@ -49,13 +47,11 @@ jobs:
         with:
           node-version: 20
 
+      - name: Forçar HTTPS no lugar de SSH
+        run: git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
+
       - name: Install dependencies
         run: yarn install --ignore-engines
-        env:
-          ELECTRON_SKIP_BINARY_DOWNLOAD: 1
-
-      - name: Rebuild better-sqlite3
-        run: npx electron-rebuild -f -w better-sqlite3
 
       - name: Build Windows
         run: yarn electron:build
