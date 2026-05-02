@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import FormButton from './FormButton';
 import FormButtonTwo from './FormButtonTwo';
+import { createAluno } from '../services/studentService';
 
 const cursosPorModalidade = {
   "UniAteneu Semipresencial (Graduação)": [
@@ -41,7 +42,7 @@ const InputForm = () => {
   const onSubmit = async (data) => {
     const nomeFaculdade = modalidadeSelecionada.split(' (')[0];
 
-    const retorno = await window.api.cadastrarAluno({
+    const retorno = await createAluno({
       nome: data.NomeCompleto,
       curso: `${data.Curso} (${nomeFaculdade})`,
       dataNasc: data.birthdate
@@ -108,7 +109,6 @@ const InputForm = () => {
           )}
         </div>
 
-        {/* Faculdade / Modalidade - dropdown customizado */}
         <div>
           <label className="text-base text-left block text-gray-700 text-sm font-bold mb-2">
             Faculdade / Modalidade
@@ -138,12 +138,8 @@ const InputForm = () => {
               </div>
             )}
           </div>
-          {errors.NomeCompleto && (
-            <p className="text-red-500 text-xs italic">{errors.NomeCompleto.message}</p>
-          )}
         </div>
 
-        {/* Curso - dropdown customizado */}
         <div>
           <label className="text-base text-left block text-gray-700 text-sm font-bold mb-2" htmlFor="Curso">
             Curso
